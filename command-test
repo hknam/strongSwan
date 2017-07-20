@@ -1,0 +1,141 @@
+#!/bin/bash
+# Automatically execute the strongSwan test cases
+#
+# Copyright (C) 2004  Eric Marchionni, Patrik Rayo
+# Zuercher Hochschule Winterthur
+#
+# This program is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by the
+# Free Software Foundation; either version 2 of the License, or (at your
+# option) any later version.  See <http://www.fsf.org/copyleft/gpl.txt>.
+#
+# This program is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+# or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
+# for more details.
+
+DIR=$(dirname `readlink -f $0`)
+. $DIR/testing.conf
+. $DIR/scripts/function.sh
+SSHCONF="-F $DIR/ssh_config"
+
+[ -d $DIR/hosts ] || die "Directory 'hosts' not found"
+[ -d $DIR/tests ] || die "Directory 'tests' not found"
+[ -d $BUILDDIR ] ||
+	die "Directory '$BUILDDIR' does not exist, please run make-testing first"
+running_any $STRONGSWANHOSTS || die "Please start test environment before running $0"
+
+ln -sfT $DIR $TESTDIR/testing
+
+##############################################################################
+# take care of new path and file variables
+#
+
+[ -d $TESTRESULTSDIR ] || mkdir $TESTRESULTSDIR
+
+TESTDATE=`date +%Y%m%d-%H%M-%S`
+
+TODAYDIR=$TESTRESULTSDIR/$TESTDATE
+mkdir $TODAYDIR
+TESTRESULTSHTML=$TODAYDIR/all.html
+INDEX=$TODAYDIR/index.html
+DEFAULTTESTSDIR=$TESTDIR/testing/tests
+
+SOURCEIP_ROUTING_TABLE=220
+
+testnumber="0"
+failed_cnt="0"
+passed_cnt="0"
+subdir_cnt="0"
+
+##############################################################################
+# copy default tests to $BUILDDIR
+#
+
+TESTSDIR=$BUILDDIR/tests
+[ -d $TESTSDIR ] || mkdir $TESTSDIR
+
+##############################################################################
+# assign IP for each host to hostname
+#
+
+for host in $STRONGSWANHOSTS
+do
+    eval ipv4_${host}="`echo $HOSTNAMEIPV4 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $1 }' | awk '{ print $1 }'`"
+    eval ipv6_${host}="`echo $HOSTNAMEIPV6 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $1 }' | awk '{ print $1 }'`"
+
+    case $host in
+    moon)
+        eval ipv4_moon1="`echo $HOSTNAMEIPV4 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $2 }' | awk '{ print $1 }'`"
+        eval ipv6_moon1="`echo $HOSTNAMEIPV6 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $2 }' | awk '{ print $1 }'`"
+        ;;
+    sun)
+        eval ipv4_sun1="`echo $HOSTNAMEIPV4 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $2 }' | awk '{ print $1 }'`"
+        eval ipv6_sun1="`echo $HOSTNAMEIPV6 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $2 }' | awk '{ print $1 }'`"
+        ;;
+    alice)
+        eval ipv4_alice1="`echo $HOSTNAMEIPV4 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $2 }' | awk '{ print $1 }'`"
+        eval ipv6_alice1="`echo $HOSTNAMEIPV6 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $2 }' | awk '{ print $1 }'`"
+        ;;
+    venus)
+        ;;
+    bob)
+        ;;
+    carol)
+        eval ipv4_carol1="`echo $HOSTNAMEIPV4 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $2 }' | awk '{ print $1 }'`"
+        eval ipv6_carol1="`echo $HOSTNAMEIPV6 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $2 }' | awk '{ print $1 }'`"
+         ;;
+    dave)
+        eval ipv4_dave1="`echo $HOSTNAMEIPV4 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $2 }' | awk '{ print $1 }'`"
+        eval ipv6_dave1="`echo $HOSTNAMEIPV6 | sed -n -e "s/^.*${host},//gp" | awk -F, '{ print $2 }' | awk '{ print $1 }'`"
+        ;;
+    winnetou)
+        ;;
+    esac
+done
+
+
+##############################################################################
+# open ssh sessions
+#
+for host in $STRONGSWANHOSTS
+do
+    ssh $SSHCONF -N root@`eval echo \\\$ipv4_$host` >/dev/null 2>&1 &
+    eval ssh_pid_$host="`echo $!`"
+    do_on_exit kill `eval echo \\\$ssh_pid_$host`
+done
+
+##############################################################################
+# determine actual software versions
+#
+
+[ -f $SHAREDDIR/.strongswan-version ] && SWANVERSION=`cat $SHAREDDIR/.strongswan-version`
+KERNELVERSION=`ssh $SSHCONF root@\$ipv4_winnetou uname -r 2>/dev/null`
+
+
+
+ssh $SSHCONF root@10.1.0.10 "ifconfig eth0| grep 'inet addr' && hostname"
+ssh $SSHCONF root@10.1.0.20 "ifconfig eth0| grep 'inet addr' && hostname"
+echo
+
+ssh $SSHCONF root@10.1.0.1 "ifconfig eth0| grep 'inet addr' && hostname"
+ssh $SSHCONF root@192.168.0.1 "ifconfig eth0| grep 'inet addr' && hostname"
+echo
+
+ssh $SSHCONF root@192.168.0.2 "ifconfig eth0| grep 'inet addr' && hostname"
+ssh $SSHCONF root@10.2.0.1 "ifconfig eth0| grep 'inet addr' && hostname"
+echo
+
+ssh $SSHCONF root@10.2.0.10 "ifconfig eth0| grep 'inet addr' && hostname"
+echo
+
+ssh $SSHCONF root@192.168.0.100 "ifconfig eth0| grep 'inet addr' && hostname"
+ssh $SSHCONF root@192.168.0.150 "ifconfig eth0| grep 'inet addr' && hostname"
+ssh $SSHCONF root@192.168.0.200 "ifconfig eth0| grep 'inet addr' && hostname"
+
+
+ENDDATE=`date +%Y%m%d-%H%M-%S`
+echo
+echo "Finished : $ENDDATE"
+echo
+
