@@ -23,7 +23,7 @@ def generate_unique_mac_list(mac_list):
 
 
 def generate_ip_list(count):
-    base_ip = "192.168.22."
+    base_ip = "192.168.122."
 
     ip_list = []
     for count in range(1, count):
