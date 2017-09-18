@@ -5,7 +5,7 @@ GREEN=$(tput setaf 2)
 YELLOW=$(tput setaf 3)
 NORMAL=$(tput op)
 
-package_install="apt-get install -y libguestfs-tools"
+package_install="apt-get install -y "
 package_update="apt-get update"
 wget_install="wget "
 uncompress_tar="tar xvf "
