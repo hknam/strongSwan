@@ -14,7 +14,7 @@ move_folder='cd '
 $package_update
 echo -e "${GREEN}'Successful : Update package sources'${NORMAL}"
 
-install_package_list='wget make gcc libgmp3-dev build-essential bridge-utils qemu libvirt-bin'
+install_package_list='wget make gcc libgmp3-dev build-essential bridge-utils qemu libvirt-bin libguestfs-tools'
 $package_install$install_package_list
 echo -e "${GREEN}'Successful : Install packages from custom repo '${NORMAL}"
 
