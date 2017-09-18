@@ -10,5 +10,5 @@ $create_virtual_bridge
 echo -e "${GREEN}'Successful : Create virtual bridge '${NORMAL}"
 
 qemu_image_install="qemu-img create -f qcow2 ./baseimage.qcow 8G"
-$create_virtual_bridge
+$qemu_image_install
 echo -e "${GREEN}'Successful : Create qemu image '${NORMAL}"
