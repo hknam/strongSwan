@@ -93,3 +93,6 @@ ENV/
 
 #idea
 .idea/*
+
+#qcow2 image
+*.qcow2
