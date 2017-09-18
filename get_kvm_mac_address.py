@@ -5,6 +5,7 @@ import sys
 def get_client_list():
     command = "virsh list --all"
     args = shlex.split(command)
+    clients = []
     try:
         with subprocess.Popen(args, stdout=subprocess.PIPE) as proc:
             output = str(proc.stdout.read())
@@ -20,7 +21,10 @@ def get_client_list():
         client = line[7:]
         strip_index = client.find(' ')
         name = client[:strip_index]
-        print(name)
+        clients.append(name)
+
+    #print(clients)
+    return clients
 
 
 def main():

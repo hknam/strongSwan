@@ -1,7 +1,7 @@
 import random
 
 def generate_random_mac_addr():
-    mac = [0x00, 0x16, 0x3e,
+    mac = [0x52, 0x54, 0x00,
     random.randint(0x00, 0x7f),
     random.randint(0x00, 0xff),
     random.randint(0x00, 0xff)]
@@ -49,7 +49,6 @@ def check(mac_list):
 
 
 def main():
-
     mac_list = generate_unique_mac_list(generate_mac_list(255))
 
 
