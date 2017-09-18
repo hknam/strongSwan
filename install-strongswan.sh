@@ -29,15 +29,15 @@ echo -e "${GREEN}'Successful : Unpack the tar file '${NORMAL}"
 
 
 target_strongswan_dir=${strongswan_source_file:0:16}
-
-
 cd $target_strongswan_dir
 strongswan_dir=$PWD
-echo $strongswan_dir
 
 configure=$strongswan_dir$'/configure --prefix=/usr --sysconfdir=/etc'
 $configure
 echo -e "${GREEN}'Successful : Configure strongSwan using options '${NORMAL}"
 
 make
+echo -e "${GREEN}'Successful : Build the strongSwan source '${NORMAL}"
+
 make install
+echo -e "${GREEN}'Successful : Install the strongSwan '${NORMAL}"
