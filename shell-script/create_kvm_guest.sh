@@ -13,11 +13,11 @@ virsh net-start $bridge_name
 package_update="apt-get update"
 package_install="apt-get install -y "
 
-$package_update
+#$package_update
 echo -e "${GREEN}'Successful : Update package sources'${NORMAL}"
 
 #install softwares
-install_package_list='wget make gcc libgmp3-dev build-essential bridge-utils qemu libvirt-bin libguestfs-tools virtinst haveged'
+install_package_list='bridge-utils qemu-kvm virt-manager libvirt-bin libguestfs-tools virtinst haveged'
 $package_install$install_package_list
 echo -e "${GREEN}'Successful : Install packages from custom repo '${NORMAL}"
 
@@ -36,12 +36,28 @@ virt-install \
   --graphics none \
   --console pty,target_type=serial \
   --location 'http://kr.archive.ubuntu.com/ubuntu/dists/xenial/main/installer-amd64' \
-  --extra-args 'console=ttyS0,115200n8 serial'
+  --extra-args 'console=ttyS0,115200n8'
+
+pidof virt-install | cut -d' ' -f1
+if [ $? -eq 0 ]; then
+    echo -e "${GREEN}'Successful : Install ubuntu-server base image from repository '${NORMAL}"
+else
+    echo -e "${RED}'Successful : Install ubuntu-server base image from repository '${NORMAL}"
+fi
 
 #shutdown base-image
 virsh shutdown base-image
+echo -e "${GREEN}'Successful : Shutdown base-image '${NORMAL}"
+
+#######################################################################
+# Important step
+# After install ubuntu-server, base-image should be off, using ctrl+]
+# And execute commands as below
+#######################################################################
 
 #mount guest's disk and enable a service
-guestmount -d base-image -i /mnt
-ln -s /mnt/lib/systemd/system/getty@.service /mnt/etc/systemd/system/getty.target.wants/getty@ttyS0.service
-umount /mnt
+#guestmount -d base-image -i /mnt
+#ln -s /mnt/lib/systemd/system/getty@.service /mnt/etc/systemd/system/getty.target.wants/getty@ttyS0.service
+#umount /mnt
+
+#echo -e "${GREEN}'Successful : mount guest's disk and enable a service '${NORMAL}"
