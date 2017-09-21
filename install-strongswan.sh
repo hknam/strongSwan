@@ -5,7 +5,7 @@ GREEN=$(tput setaf 2)
 YELLOW=$(tput setaf 3)
 NORMAL=$(tput op)
 
-package_install="apt-get install -y libguestfs-tools"
+package_install="apt-get install -y "
 package_update="apt-get update"
 wget_install="wget "
 uncompress_tar="tar xvf "
@@ -16,7 +16,7 @@ $package_update
 echo -e "${GREEN}'Successful : Update package sources'${NORMAL}"
 
 #install softwares
-install_package_list='wget make gcc libgmp3-dev build-essential bridge-utils qemu libvirt-bin libguestfs-tools virtinst'
+install_package_list='wget make gcc libgmp3-dev build-essential bridge-utils qemu libvirt-bin libguestfs-tools virtinst haveged'
 $package_install$install_package_list
 echo -e "${GREEN}'Successful : Install packages from custom repo '${NORMAL}"
 

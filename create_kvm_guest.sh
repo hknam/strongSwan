@@ -8,7 +8,18 @@ NORMAL=$(tput op)
 bridge_name='default'
 #create virtual bridge
 virsh net-define $bridge_name'.xml'
-vursg net-start $bridge_name
+virsh net-start $bridge_name
+
+package_update="apt-get update"
+package_install="apt-get install -y "
+
+$package_update
+echo -e "${GREEN}'Successful : Update package sources'${NORMAL}"
+
+#install softwares
+install_package_list='wget make gcc libgmp3-dev build-essential bridge-utils qemu libvirt-bin libguestfs-tools virtinst haveged'
+$package_install$install_package_list
+echo -e "${GREEN}'Successful : Install packages from custom repo '${NORMAL}"
 
 #create qemu image
 qemu_image_install="qemu-img create -f qcow2 ./baseimage.qcow2 8G"
