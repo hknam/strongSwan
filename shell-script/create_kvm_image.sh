@@ -26,11 +26,14 @@ qemu_image_install="qemu-img create -f qcow2 ./baseimage.qcow2 8G"
 $qemu_image_install
 echo -e "${GREEN}'Successful : Create qemu image '${NORMAL}"
 
+#create image folder
+mkdir -p images
+
 #create kvm-image from ubuntu archive
 virt-install \
   --name base-image \
   --ram 1024 \
-  --disk path=./baseimage.qcow2 \
+  --disk path=./images/baseimage.qcow2 \
   --vcpus 1 \
   --os-type linux \
   --graphics none \

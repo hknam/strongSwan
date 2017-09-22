@@ -1,4 +1,6 @@
 import random
+import subprocess
+import sys
 
 def generate_random_mac_addr():
     mac = [0x52, 0x54, 0x00,
@@ -39,6 +41,16 @@ def generate_mac_list(count):
 
     return mac_list
 
+def generate_clone_list(count, ip_list, mac_list):
+    clone_list = {}
+    clone_list['server'] = ip_list[0] + '/' + mac_list[0]
+
+    for index in range(1, count-1):
+        clone_list['client'+str(index)] = ip_list[index] + '/' + mac_list[index]
+
+
+    return clone_list
+
 def check(mac_list):
     unique_mac_list = list(set(mac_list))
 
@@ -48,13 +60,37 @@ def check(mac_list):
         return True
 
 
+def run_virt_clone(kvm_image_list):
+
+    for kvm in kvm_image_list:
+        new_image_name = kvm[0]
+
+        command = 'virt-clone --original base-image --name ' + new_image_name + ' --file ../images/' + new_image_name + '.img'
+
+        run_command = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
+
+        print(run_command.stdout.read())
+
+
+
+
+
 def main():
-    mac_list = generate_unique_mac_list(generate_mac_list(255))
 
+    try:
+        number_of_client = int(sys.argv[1])
+    except IndexError as e:
+        print('NEED CLIENT COUNT')
+        sys.exit(1)
 
-    ip_list = generate_ip_list(255)
+    mac_list = generate_unique_mac_list(generate_mac_list(number_of_client))
+    ip_list = generate_ip_list(number_of_client)
 
+    kvm_image_list = generate_clone_list(number_of_client, mac_list, ip_list)
 
+    run_virt_clone(kvm_image_list.items())
+
+    '''
     kvm_network_info = {}
 
     for count in range(len(ip_list)):
@@ -63,6 +99,10 @@ def main():
 
     for info in kvm_network_info.items():
         print(info)
+    '''
+
+
+
 if __name__ == "__main__":
     main()
 
