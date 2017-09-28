@@ -21,13 +21,15 @@ install_package_list='bridge-utils qemu-kvm virt-manager libvirt-bin libguestfs-
 $package_install$install_package_list
 echo -e "${GREEN}'Successful : Install packages from custom repo '${NORMAL}"
 
+#create image folder
+mkdir -p images
+
 #create qemu image
-qemu_image_install="qemu-img create -f qcow2 ./baseimage.qcow2 8G"
+qemu_image_install="qemu-img create -f qcow2 ./images/baseimage.qcow2 8G"
 $qemu_image_install
 echo -e "${GREEN}'Successful : Create qemu image '${NORMAL}"
 
-#create image folder
-mkdir -p images
+
 
 #create kvm-image from ubuntu archive
 virt-install \

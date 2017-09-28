@@ -97,5 +97,5 @@ ENV/
 #qcow2 image
 *.qcow2
 
-#img
-images/*
+#img, qcow2
+./images/*
