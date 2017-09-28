@@ -45,22 +45,22 @@ pidof virt-install | cut -d' ' -f1
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}'Successful : Install ubuntu-server base image from repository '${NORMAL}"
 else
-    echo -e "${RED}'Successful : Install ubuntu-server base image from repository '${NORMAL}"
+    echo -e "${RED}'Fail : Install ubuntu-server base image from repository '${NORMAL}"
 fi
 
 #shutdown base-image
 virsh shutdown base-image
 echo -e "${GREEN}'Successful : Shutdown base-image '${NORMAL}"
 
-#######################################################################
-# Important step
-# After install ubuntu-server, base-image should be off, using ctrl+]
-# And execute commands as below
-#######################################################################
+echo "#######################################################################"
+echo "# Important step"
+echo "# After install ubuntu-server, base-image should be off, using ctrl+]"
+echo "# And execute commands as below"
+echo "#######################################################################"
 
-#mount guest's disk and enable a service
-#guestmount -d base-image -i /mnt
-#ln -s /mnt/lib/systemd/system/getty@.service /mnt/etc/systemd/system/getty.target.wants/getty@ttyS0.service
-#umount /mnt
+echo "mount guest's disk and enable a service"
+echo "guestmount -d base-image -i /mnt"
+echo "ln -s /mnt/lib/systemd/system/getty@.service /mnt/etc/systemd/system/getty.target.wants/getty@ttyS0.service"
+echo "umount /mnt"
 
 #echo -e "${GREEN}'Successful : mount guest's disk and enable a service '${NORMAL}"
