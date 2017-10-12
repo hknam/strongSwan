@@ -74,7 +74,6 @@ def run_virt_clone(kvm_image_list):
 
 
 
-
 def main():
 
     try:
