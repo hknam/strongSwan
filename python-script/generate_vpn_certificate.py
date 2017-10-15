@@ -24,7 +24,7 @@ def create_server_certificate():
     print_certificate = 'openssl x509 -inform DER -in /etc/ipsec.d/certs/vpnHostCert.der -noout -text'
     run_command(print_certificate)
 
-def create_ipsec_conf():
+def create_ipsec_conf(server_ip, client_ip, client_name):
     with open('ipsec.conf', 'w') as outfile:
         outfile.writelines('# ipsec.conf - strongSwan IPsec configuration file\n')
         outfile.write('config setup\n\n')
@@ -39,7 +39,7 @@ def create_ipsec_conf():
 
         outfile.write('conn home\n')
         outfile.write('	left=' + client_ip + '\n')
-        outfile.write('	leftcert=' + certificate + '\n')
+        outfile.write('	leftcert=' + client_name + '.pem' + '\n')
         outfile.write('	leftfirewall=yes\n')
         outfile.write('	leftconfig=%config\n')
         outfile.write('	right=' + server_ip + '\n')
