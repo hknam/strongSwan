@@ -99,3 +99,6 @@ ENV/
 
 #img, qcow2
 ./images/*
+
+#config
+./config/*

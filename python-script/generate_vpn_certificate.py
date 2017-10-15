@@ -35,6 +35,17 @@ def create_ipsec_conf():
         outfile.write('	rekeymargin=3m\n')
         outfile.write('	keyingtries=1m\n')
 
+        outfile.write('\n')
+
+        outfile.write('conn home\n')
+        outfile.write('	left=' + client_ip + '\n')
+        outfile.write('	leftcert=' + certificate + '\n')
+        outfile.write('	leftfirewall=yes\n')
+        outfile.write('	leftconfig=%config\n')
+        outfile.write('	right=' + server_ip + '\n')
+        outfile.write('	rightsubnet=0.0.0.0/0\n')
+        outfile.write('	auto=add\n')
+
 
 def run_command(cmd):
 
