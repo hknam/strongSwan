@@ -103,4 +103,6 @@ def main():
     run_haveged()
     create_server_certificate()
     create_client_certificate()
-    
+
+if __name__ == '__main__':
+    main()

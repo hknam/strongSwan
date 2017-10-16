@@ -21,7 +21,7 @@ $package_install$install_package_list
 echo -e "${GREEN}'Successful : Install packages from custom repo '${NORMAL}"
 
 #strongSwan source code download
-strongswan_url='https://download.strongswan.org/strongswan-5.6.0.tar.bz2'
+strongswan_url='https://download.strongswan.org/strongswan-5.5.3.tar.bz2'
 $wget_install$strongswan_url
 echo -e "${GREEN}'Successful : Install strongSwan source file from '$strongswan_url${NORMAL}"
 

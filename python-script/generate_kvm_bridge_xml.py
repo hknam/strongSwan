@@ -83,9 +83,20 @@ def make_xml():
     tree.write("./config/default.xml")
 
 
+def apply_xml():
+    define = 'virsh net-define ./config/default.xml'
+    print(run_command(define))
+
+    start = 'virsh net-start default'
+    print(run_command(start))
+
+
 def main():
-    #make_xml()
     get_client_mac()
+    make_xml()
+    apply_xml()
+
+
 
 if __name__ == '__main__':
     main()
