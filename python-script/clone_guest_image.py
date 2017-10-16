@@ -86,7 +86,7 @@ def run_virt_clone(kvm_image_list):
     for kvm in kvm_image_list:
         new_image_name = kvm.split(',')[0]
 
-        command = 'virt-clone --original ../base-image --name ' + new_image_name + ' --file ../images/' + new_image_name + '.img'
+        command = 'virt-clone --original base-image --name ' + new_image_name + ' --file ../images/' + new_image_name + '.img'
 
         run_command = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
 

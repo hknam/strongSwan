@@ -1,5 +1,5 @@
 from lxml import etree
-from generate_vpn_certificate import run_command
+import subprocess
 
 def get_client_info():
     config = './config/clients.csv'
@@ -9,16 +9,32 @@ def get_client_info():
 
     return clients
 
-
 def get_client_mac():
     clients = get_client_info()
-    for client in clients:
+    macs = []
+    for client in clients[:-1]:
         name = client.split(',')[0]
-        grep_mac = 'virsh dumpxml ' + name + ' | grep -i <mac'
-        output = run_command(grep_mac)
-        print(output.stdout.read())
+        grep_mac = 'virsh dumpxml ' + name + ' | grep -i "<mac"'
+        mac = str(run_command(grep_mac)).split('=')[1].split('/')[0]
+        mac = mac.replace("'", "")
+        #print(name, mac)
+        macs.append(mac)
+    return macs
 
+def run_command(cmd):
+    command = subprocess.Popen(cmd, stdout = subprocess.PIPE, shell=True)
+    output = command.communicate()
+    return output[0]
 
+def add_mac_info():
+    clients = get_client_info()
+    macs = get_client_mac()
+    config = './config/clients.csv'
+
+    with open(config, 'w') as writer:
+        for index in range(len(macs)):
+            client = clients[index].replace('\n', '')
+            writer.write(client +',' +  macs[index] + '\n')
 
 def make_xml():
     network = etree.Element('network')
@@ -36,18 +52,18 @@ def make_xml():
     clients = get_client_info()
 
 
-    #name,mac_addr,ip_addr
-    start_ip_addr = clients[0].split(',')[2]
+    #name,ip_addr,mac_addr
+    start_ip_addr = clients[0].split(',')[1]
     #end : \n
-    end_ip_addr = clients[-2].split(',')[2]
+    end_ip_addr = clients[-2].split(',')[1]
 
     range = etree.SubElement(dhcp, 'range', end=end_ip_addr, start=start_ip_addr)
 
     for client in clients[:-2]:
         line = client.split(',')
         name = line[0]
-        mac_addr = line[1]
-        ip_addr = line[2]
+        mac_addr = line[2]
+        ip_addr = line[1]
 
         etree.SubElement(dhcp, 'host', mac=mac_addr, name=name, ip=ip_addr)
 
