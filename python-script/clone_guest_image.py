@@ -68,7 +68,7 @@ def check(mac_list):
 def run_virt_clone(kvm_image_list):
 
     for kvm in kvm_image_list:
-        new_image_name = kvm[0]
+        new_image_name = kvm[0].split(',')[0]
 
         command = 'virt-clone --original base-image --name ' + new_image_name + ' --file ../images/' + new_image_name + '.img'
 
@@ -97,7 +97,7 @@ def main():
 
     kvm_image_list = generate_clone_list(number_of_client, mac_list, ip_list)
 
-    #run_virt_clone(kvm_image_list.items())
+    run_virt_clone(kvm_image_list)
 
 
     '''
