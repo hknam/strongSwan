@@ -99,4 +99,8 @@ def run_command(cmd):
     print(command.stdout.read())
 
 
-
+def main():
+    run_haveged()
+    create_server_certificate()
+    create_client_certificate()
+    
