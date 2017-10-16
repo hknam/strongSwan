@@ -22,10 +22,10 @@ $package_install$install_package_list
 echo -e "${GREEN}'Successful : Install packages from custom repo '${NORMAL}"
 
 #create image folder
-mkdir -p images
+mkdir -p ../images
 
 #create qemu image
-qemu_image_install="qemu-img create -f qcow2 ./images/baseimage.qcow2 8G"
+qemu_image_install="qemu-img create -f qcow2 ../images/baseimage.qcow2 8G"
 $qemu_image_install
 echo -e "${GREEN}'Successful : Create qemu image '${NORMAL}"
 
@@ -35,7 +35,7 @@ echo -e "${GREEN}'Successful : Create qemu image '${NORMAL}"
 virt-install \
   --name base-image \
   --ram 1024 \
-  --disk path=./images/baseimage.qcow2 \
+  --disk path=../images/baseimage.qcow2 \
   --vcpus 1 \
   --os-type linux \
   --graphics none \

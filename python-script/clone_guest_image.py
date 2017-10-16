@@ -75,7 +75,7 @@ def run_virt_clone(kvm_image_list):
         run_command = subprocess.Popen(command, stdout=subprocess.PIPE, shell=True)
 
         print(run_command.stdout.read())
-        
+
 
 
 
