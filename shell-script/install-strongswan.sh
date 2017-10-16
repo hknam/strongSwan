@@ -16,7 +16,7 @@ $package_update
 echo -e "${GREEN}'Successful : Update package sources'${NORMAL}"
 
 #install softwares
-install_package_list='wget make gcc libgmp3-dev build-essential'
+install_package_list='wget make gcc libgmp3-dev build-essential libtool pkg-config'
 $package_install$install_package_list
 echo -e "${GREEN}'Successful : Install packages from custom repo '${NORMAL}"
 
@@ -32,19 +32,19 @@ $uncompress_tar$strongswan_source_file
 echo -e "${GREEN}'Successful : Unpack the tar file '${NORMAL}"
 
 #move strongSwan directory
-target_strongswan_dir=${strongswan_source_file:0:16}
-cd $target_strongswan_dir
-strongswan_dir=$PWD
+#target_strongswan_dir=${strongswan_source_file:0:16}
+#cd $target_strongswan_dir
+#strongswan_dir=$PWD
 
 #configure
-configure=$strongswan_dir$'/configure --prefix=/usr --sysconfdir=/etc'
-$configure
-echo -e "${GREEN}'Successful : Configure strongSwan using options '${NORMAL}"
+#configure=$strongswan_dir$'/configure --prefix=/usr --sysconfdir=/etc'
+#$configure
+#echo -e "${GREEN}'Successful : Configure strongSwan using options '${NORMAL}"
 
 #make
-make
-echo -e "${GREEN}'Successful : Build the strongSwan source '${NORMAL}"
+#make
+#echo -e "${GREEN}'Successful : Build the strongSwan source '${NORMAL}"
 
 #install strongSwan
-make install
-echo -e "${GREEN}'Successful : Install the strongSwan '${NORMAL}"
+#make install
+#echo -e "${GREEN}'Successful : Install the strongSwan '${NORMAL}"
