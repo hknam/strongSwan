@@ -29,7 +29,18 @@ qemu_image_install="qemu-img create -f qcow2 ../images/baseimage.qcow2 8G"
 $qemu_image_install
 echo -e "${GREEN}'Successful : Create qemu image '${NORMAL}"
 
+echo "#######################################################################"
+echo "# Important step"
+echo "# After install ubuntu-server, base-image should be off, using ctrl+]"
+echo "# And execute commands as below"
+echo "#######################################################################"
 
+echo "mount guest's disk and enable a service"
+echo "guestmount -d base-image -i /mnt"
+echo "ln -s /mnt/lib/systemd/system/getty@.service /mnt/etc/systemd/system/getty.target.wants/getty@ttyS0.service"
+echo "umount /mnt"
+
+sleep 5
 
 #create kvm-image from ubuntu archive
 virt-install \
@@ -54,15 +65,6 @@ fi
 virsh shutdown base-image
 echo -e "${GREEN}'Successful : Shutdown base-image '${NORMAL}"
 
-echo "#######################################################################"
-echo "# Important step"
-echo "# After install ubuntu-server, base-image should be off, using ctrl+]"
-echo "# And execute commands as below"
-echo "#######################################################################"
 
-echo "mount guest's disk and enable a service"
-echo "guestmount -d base-image -i /mnt"
-echo "ln -s /mnt/lib/systemd/system/getty@.service /mnt/etc/systemd/system/getty.target.wants/getty@ttyS0.service"
-echo "umount /mnt"
 
 #echo -e "${GREEN}'Successful : mount guest's disk and enable a service '${NORMAL}"

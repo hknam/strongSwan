@@ -1,4 +1,5 @@
 from lxml import etree
+from generate_vpn_certificate import run_command
 
 def get_client_info():
     config = './config/clients.csv'
@@ -7,6 +8,17 @@ def get_client_info():
         clients = reader.read().split('\n')
 
     return clients
+
+
+def get_client_mac():
+    clients = get_client_info()
+    for client in clients:
+        name = client.split(',')[0]
+        grep_mac = 'virsh dumpxml ' + name + ' | grep -i <mac'
+        output = run_command(grep_mac)
+        print(output.stdout.read())
+
+
 
 def make_xml():
     network = etree.Element('network')
@@ -56,7 +68,8 @@ def make_xml():
 
 
 def main():
-    make_xml()
+    #make_xml()
+    get_client_mac()
 
 if __name__ == '__main__':
     main()

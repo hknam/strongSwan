@@ -44,6 +44,7 @@ def generate_mac_list(count):
 
     return mac_list
 
+'''
 def generate_clone_list(count, ip_list, mac_list):
     clone_list = []
     clone_list.append('server' + ',' + ip_list[0] + ',' + mac_list[0])
@@ -55,6 +56,21 @@ def generate_clone_list(count, ip_list, mac_list):
 
 
     return clone_list
+'''
+
+def generate_clone_list(count, ip_list):
+    clone_list = []
+    clone_list.append('server' + ',' + ip_list[0])
+    #clone_list['server'] = ip_list[0] + '/' + mac_list[0]
+
+    for index in range(1, count):
+        #clone_list['client'+str(index)] = ip_list[index] + '/' + mac_list[index]
+        clone_list.append('client' + str(index) + ',' + ip_list[index])
+
+
+    return clone_list
+
+
 
 def check(mac_list):
     unique_mac_list = list(set(mac_list))
@@ -92,40 +108,18 @@ def main():
         print('CLIENTS MUST BE SMALLER THAN 250')
         sys.exit(1)
 
-    mac_list = generate_unique_mac_list(generate_mac_list(number_of_client))
+    #mac_list = generate_unique_mac_list(generate_mac_list(number_of_client))
     ip_list = generate_ip_list(number_of_client)
 
-    kvm_image_list = generate_clone_list(number_of_client, mac_list, ip_list)
+    #kvm_image_list = generate_clone_list(number_of_client, mac_list, ip_list)
 
-    run_virt_clone(kvm_image_list)
-
-
-    '''
-    config_dir = './config/'
-
-    for client in kvm_image_list.keys():
-        client_config_dir = config_dir + client
-        if not os.path.exists(client_config_dir):
-            os.makedirs(client_config_dir)
-
-        with open(client_config_dir + '/ip_address', 'w') as ip:
-            ip.write(client.)
-
-    
-
-    
-
-    kvm_network_info = {}
-
-    for count in range(len(ip_list)):
-        kvm_network_info[ip_list[count]] = mac_list[count]
+    kvm_image_list = generate_clone_list(number_of_client, ip_list)
 
 
-    for info in kvm_network_info.items():
-        print(info)
+
+    #run_virt_clone(kvm_image_list)
 
 
-    '''
 
     config_dir = './config/'
     if not os.path.exists(config_dir):
