@@ -16,7 +16,7 @@ $package_update
 echo -e "${GREEN}'Successful : Update package sources'${NORMAL}"
 
 #install softwares
-install_package_list='wget make gcc libgmp3-dev build-essential libtool pkg-config'
+install_package_list='wget make gcc libgmp3-dev build-essential libtool pkg-config automake vim git ssh'
 $package_install$install_package_list
 echo -e "${GREEN}'Successful : Install packages from custom repo '${NORMAL}"
 
