@@ -4,6 +4,8 @@ import os
 server_ip = '192.168.122.2'
 
 def run_haveged():
+    haveged_install = 'apt-get install -y haveged'
+    run_command(haveged_install)
     enable = 'systemctl enable haveged'
     run_command(enable)
     start = 'systemctl start haveged'
